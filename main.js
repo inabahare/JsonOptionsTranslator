@@ -14,15 +14,12 @@ const translator = new Translate({ projectId });
     console.log("Translating:")
     for (const [ key, value ] of Object.entries(english)) {
         console.log(`\t ${key}`)
+
         const [ translation ] = await translator.translate(value, languageCode);
-        
         translated[key] = translation;
     }
     console.log("Done");
     const jsonString = JSON.stringify(translated);
-
-    console.log("This was what was translated");
-    console.log(jsonString);
 
     fs.writeFile("./translated", jsonString, () => {
         console.log("Translations written to disk");
