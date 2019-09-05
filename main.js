@@ -1,27 +1,41 @@
+const Language = require("./Language");
+
+
+// https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers
+const translateTo = [
+    new Language("turkish", "tr"),
+    new Language("swedish", "sv"),
+]
+
+
 const fs = require("fs");
-
 const { Translate } = require("@google-cloud/translate");
-const english = require("./english.json");
+const english = require("./from.json");
 
-const languageCode = "el" // https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers
-const projectId = "";
+const translator = new Translate();
 
-const translated = {};
+async function translate(language, languageCode) {
+    const translated = {};
 
-const translator = new Translate({ projectId });
-
-(async function() {
-    console.log("Translating:")
+    console.log(`Translating ${language}:`)
     for (const [ key, value ] of Object.entries(english)) {
-        console.log(`\t ${key}`)
+        console.log(`\t ${language.toUpperCase()}_${key}`)
 
         const [ translation ] = await translator.translate(value, languageCode);
         translated[key] = translation;
     }
-    console.log("Done");
+
     const jsonString = JSON.stringify(translated);
 
-    fs.writeFile("./translated", jsonString, () => {
+    fs.writeFile(`./${language}.translated.json`, jsonString, () => {
         console.log("Translations written to disk");
     })
+}
+
+(async function() {
+    const translators = 
+        translateTo.map(language => translate(language.language, language.languageCode));
+
+    await Promise.all(translators);
+    console.log("Translating complete");
 })()
