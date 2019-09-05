@@ -1,3 +1,7 @@
+# DEPENDENCIES
+
+Node.JS (Tested on 12.9.1)
+
 # SETUP
 
 * you need have an API key on your computer and an environment variable called _GOOGLE_APPLICATION_CREDENTIALS_ that needs to point to it. (See step one and two [here](https://cloud.google.com/translate/docs/quickstart-client-libraries)).
